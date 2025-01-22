@@ -36,6 +36,15 @@ app.get('/check-auth', (req, res) => {
     }
 });
 
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Failed to logout.');
+        }
+        res.send('Logged out successfully.');
+    });
+});
+
 app.post('/add-password', (req, res) => {
     if (!req.session.authenticated) {
         return res.status(401).send('Unauthorized');
