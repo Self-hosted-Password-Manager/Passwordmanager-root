@@ -53,13 +53,18 @@ app.post('/add-password', (req, res) => {
     const { service, username, password } = req.body;
     let passwords = {};
 
-    if (fs.existsSync(PASSWORD_FILE)) {
-        passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
-    }
+    try {
+        if (fs.existsSync(PASSWORD_FILE)) {
+            passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
+        }
 
-    passwords[service] = { username, password };
-    fs.writeFileSync(PASSWORD_FILE, JSON.stringify(passwords));
-    res.send('Password added successfully!');
+        passwords[service] = { username, password };
+        fs.writeFileSync(PASSWORD_FILE, JSON.stringify(passwords));
+        res.send('Password added successfully!');
+    } catch (error) {
+        console.error('Error adding password:', error);
+        res.status(500).send('Failed to add password.');
+    }
 });
 
 app.post('/get-password', (req, res) => {
@@ -68,15 +73,20 @@ app.post('/get-password', (req, res) => {
     }
 
     const { service } = req.body;
-    if (fs.existsSync(PASSWORD_FILE)) {
-        const passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
-        if (passwords[service]) {
-            res.json(passwords[service]);
+    try {
+        if (fs.existsSync(PASSWORD_FILE)) {
+            const passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
+            if (passwords[service]) {
+                res.json(passwords[service]);
+            } else {
+                res.status(404).send('No password found for this service.');
+            }
         } else {
             res.status(404).send('No password found for this service.');
         }
-    } else {
-        res.status(404).send('No password found for this service.');
+    } catch (error) {
+        console.error('Error getting password:', error);
+        res.status(500).send('Failed to get password.');
     }
 });
 
@@ -86,17 +96,22 @@ app.delete('/delete-password', (req, res) => {
     }
 
     const { service } = req.body;
-    if (fs.existsSync(PASSWORD_FILE)) {
-        let passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
-        if (passwords[service]) {
-            delete passwords[service];
-            fs.writeFileSync(PASSWORD_FILE, JSON.stringify(passwords));
-            res.send('Password deleted successfully!');
+    try {
+        if (fs.existsSync(PASSWORD_FILE)) {
+            let passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
+            if (passwords[service]) {
+                delete passwords[service];
+                fs.writeFileSync(PASSWORD_FILE, JSON.stringify(passwords));
+                res.send('Password deleted successfully!');
+            } else {
+                res.status(404).send('No password found for this service.');
+            }
         } else {
             res.status(404).send('No password found for this service.');
         }
-    } else {
-        res.status(404).send('No password found for this service.');
+    } catch (error) {
+        console.error('Error deleting password:', error);
+        res.status(500).send('Failed to delete password.');
     }
 });
 
@@ -106,17 +121,22 @@ app.put('/update-password', (req, res) => {
     }
 
     const { service, username, password } = req.body;
-    if (fs.existsSync(PASSWORD_FILE)) {
-        let passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
-        if (passwords[service]) {
-            passwords[service] = { username, password };
-            fs.writeFileSync(PASSWORD_FILE, JSON.stringify(passwords));
-            res.send('Password updated successfully!');
+    try {
+        if (fs.existsSync(PASSWORD_FILE)) {
+            let passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
+            if (passwords[service]) {
+                passwords[service] = { username, password };
+                fs.writeFileSync(PASSWORD_FILE, JSON.stringify(passwords));
+                res.send('Password updated successfully!');
+            } else {
+                res.status(404).send('No password found for this service.');
+            }
         } else {
             res.status(404).send('No password found for this service.');
         }
-    } else {
-        res.status(404).send('No password found for this service.');
+    } catch (error) {
+        console.error('Error updating password:', error);
+        res.status(500).send('Failed to update password.');
     }
 });
 
@@ -126,15 +146,20 @@ app.get('/search-password', (req, res) => {
     }
 
     const { service } = req.query;
-    if (fs.existsSync(PASSWORD_FILE)) {
-        const passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
-        if (passwords[service]) {
-            res.json(passwords[service]);
+    try {
+        if (fs.existsSync(PASSWORD_FILE)) {
+            const passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
+            if (passwords[service]) {
+                res.json(passwords[service]);
+            } else {
+                res.status(404).send('No password found for this service.');
+            }
         } else {
             res.status(404).send('No password found for this service.');
         }
-    } else {
-        res.status(404).send('No password found for this service.');
+    } catch (error) {
+        console.error('Error searching password:', error);
+        res.status(500).send('Failed to search password.');
     }
 });
 
@@ -143,11 +168,16 @@ app.get('/list-passwords', (req, res) => {
         return res.status(401).send('Unauthorized');
     }
 
-    if (fs.existsSync(PASSWORD_FILE)) {
-        const passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
-        res.json(passwords);
-    } else {
-        res.status(404).send('No passwords found.');
+    try {
+        if (fs.existsSync(PASSWORD_FILE)) {
+            const passwords = JSON.parse(fs.readFileSync(PASSWORD_FILE));
+            res.json(passwords);
+        } else {
+            res.status(404).send('No passwords found.');
+        }
+    } catch (error) {
+        console.error('Error listing passwords:', error);
+        res.status(500).send('Failed to list passwords.');
     }
 });
 
