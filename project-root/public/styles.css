@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -6,12 +7,46 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    justify-content: space-between;
+    min-height: 100vh;
 }
 
-h1 {
-    color: #333;
+/* Header Styles */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p {
+    margin: 10px 0 0;
+}
+
+/* Main Content Styles */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
 }
 
 div {
@@ -31,9 +66,17 @@ input {
     border-radius: 3px;
 }
 
-button {
-    width: 100%;
+pre {
+    background: #f4f4f4;
     padding: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    overflow: auto;
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
     background-color: #007BFF;
     color: white;
     border: none;
@@ -46,10 +89,9 @@ button:hover {
     background-color: #0056b3;
 }
 
-pre {
-    background: #f4f4f4;
-    padding: 10px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    overflow: auto;
+/* Logout Button Styles */
+.logout-button {
+    margin-top: auto;
+    margin-bottom: 20px;
+    align-self: center;
 }
