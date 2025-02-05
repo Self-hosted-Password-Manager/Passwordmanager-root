@@ -1,1 +1,1 @@
-Lean how to host at (https://github.com/Self-hosted-Password-Manager/How-To-Host) [here]
+Lean how to host at [here](https://github.com/Self-hosted-Password-Manager/How-To-Host)
